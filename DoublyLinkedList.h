@@ -115,7 +115,7 @@ public:
         head = nullptr;
     }
 
-    
+
 
 
     int sequentialSearch(int target) {
