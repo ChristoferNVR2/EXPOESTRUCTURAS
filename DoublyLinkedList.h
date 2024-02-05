@@ -118,21 +118,23 @@ public:
     
 
 
-    void sequentialSearch(int target) {
-        int pos = 1;
-        Node* current = head;
-
+    int sequentialSearch(int target) {
         if (head == nullptr){
-            cout << "LISTA VACIA";
+            return 0;
         }
+
+        Node* current = head;
+        int pos = 1;
 
         do {
             if (current->value == target) {
-                cout << "ELEMENTO " << target << " ENCONTRADO EN LA POSICION " << pos  << endl;
+                return pos;
             }
             pos++;
             current = current->next;
         } while (current != nullptr);
+
+        return 0;
     }
 
     [[nodiscard]] bool binarySearch(int ref) const {
