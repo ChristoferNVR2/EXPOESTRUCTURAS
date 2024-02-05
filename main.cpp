@@ -94,7 +94,11 @@ int main () {
     }
     MyList.displayList();
 
-    MyList.sequentialSearch(busq);
+    if (MyList.sequentialSearch(busq) != 0) {
+        cout << "ELEMENTO " << busq << " ENCONTRADO EN LA POSICION " << MyList.sequentialSearch(busq) << endl;
+    } else {
+        cout << "ELEMENTO " << busq << " NO ENCONTRADO EN LA LISTA" << endl;
+    }
 
     if (MyList.binarySearch(busq)) {
         cout << "ELEMENTO " << busq << " ENCONTRADO EN LA LISTA" << endl;
