@@ -8,12 +8,9 @@
 using namespace std;
 
 class DoublyLinkedList {
-public:
+private:
     Node* head;
-
-    DoublyLinkedList() : head(nullptr) {}
-
-    [[nodiscard]] Node* lastNode() const {
+    [[nodiscard]]Node* lastNode() const {
         if (head == nullptr) {
             return nullptr;
         }
@@ -23,6 +20,64 @@ public:
         }
         return last;
     }
+    static Node* findMid(Node* first, Node* last) {
+        if (first == nullptr || last == nullptr) {
+            return nullptr;
+        }
+
+        while (first->next != nullptr && first->next != last) {
+            first = first->next;
+            if (last->prev != nullptr) {
+                last = last->prev;
+            }
+        }
+
+        return first;
+    }
+
+    static bool binarySearch(Node* start, Node* end, int ref) {
+        if (start == end) {
+            return (start != nullptr && start->value == ref);
+        }
+
+        while (start != nullptr && start != end) {
+            Node* mid = findMid(start, end);
+
+            if (mid->value == ref) {
+                return true;
+            } else if (mid->value < ref) {
+                start = mid->next;
+            } else {
+                end = mid->prev;
+            }
+        }
+
+        return false;
+    }
+
+    bool recursiveSearch(Node* start, Node* end, int ref) const { // NOLINT(misc-no-recursion)
+        if (start == end) {
+            return (start != nullptr && start->value == ref);
+        }
+
+        Node* mid = findMid(start, end);
+
+        if (mid != nullptr) {
+            if (mid->value == ref) {
+                return true;
+            } else if (mid->value < ref) {
+                return recursiveSearch(mid->next, end, ref);
+            } else {
+                return recursiveSearch(start, mid->prev, ref);
+            }
+        }
+
+        return false;
+    }
+
+public:
+
+    DoublyLinkedList() : head(nullptr) {}
 
     void insert(int val) {
         Node* tail = lastNode();
@@ -60,51 +115,37 @@ public:
         head = nullptr;
     }
 
-    [[nodiscard]] bool binarySearch(int ref) const {
-        if (head == nullptr) {
-            return false;
+    
+
+
+    void sequentialSearch(int target) {
+        int pos = 1;
+        Node* current = head;
+
+        if (head == nullptr){
+            cout << "LISTA VACIA";
         }
 
-        Node* start = head;
-        Node* end = lastNode();
-
-        //se compara con nullptr para el caso en que no exista
-        while (start != nullptr && end != nullptr && start != end) {
-            Node* mid = findMid(start, end);
-
-            if (mid->value == ref) {
-                return true;
-            } else if (mid->value < ref) {
-                start = mid->next;
-            } else {
-                end = mid->prev;
+        do {
+            if (current->value == target) {
+                cout << "ELEMENTO " << target << " ENCONTRADO EN LA POSICION " << pos  << endl;
             }
-        }
+            pos++;
+            current = current->next;
+        } while (current != nullptr);
+    }
 
-        //aca tambien
-        return ((start != nullptr && start->value == ref) || (end != nullptr && end->value == ref));
+    [[nodiscard]] bool binarySearch(int ref) const {
+        return binarySearch(head, lastNode(), ref);
+    }
+
+    [[nodiscard]] bool recursiveSearch(int ref) const {
+        return recursiveSearch(head, lastNode(), ref);
     }
 
     ~DoublyLinkedList() {
         deleteList();
     }
-
-private:
-    static Node* findMid(Node* first, Node* last) {
-        if (first == nullptr || last == nullptr) {
-            return nullptr;
-        }
-
-        while (first->next != nullptr && first->next != last) {
-            first = first->next;
-            if (last->prev != nullptr) {
-                last = last->prev;
-            }
-        }
-
-        return first;
-    }
 };
-
 
 #endif //EXPOBUSQUEDAS_DOUBLYLINKEDLIST_H
